@@ -15,12 +15,27 @@ This exercise will demonstrate the following in the example video:
  - Check the value of a variable and have it do something
 */
 
+VAR food = 0
 
+VAR Name = ""
+VAR tourches = 0    
 
--> cave_mouth
-
+-> memory
+== memory  ==
+Before you enter the cave, you can call one of your best friends. so you don't have to enter the cave along. who would you call?
+*[Bill]
+    ~ Name = "Bill"
+    -> cave_mouth
+*[Peter]
+    ~ Name = "Peter"
+    -> cave_mouth
+*[Ben]
+    ~ Name = "Ben"
+    -> cave_mouth
 == cave_mouth ==
-You are at the enterance to a cave. {not torch_pickup:There is a torch on the floor.} The cave extends to the east and west.
+You are at the enterance to a cave. {not torch_pickup:There is a torch on the floor.} The cave extends to the east and west.if only {Name} can see you now
+
+you have {tourches} tourches now
 
 
 
@@ -30,16 +45,46 @@ You are at the enterance to a cave. {not torch_pickup:There is a torch on the fl
 
 == east_tunnel ==
 You are in the east tunnel. It is very dark, you can't see anything.
-* {torch_pickup} [Light Torch] -> east_tunnel_lit
+* {tourches > 0 } [Light Torch] -> east_tunnel_lit
+*{Name == "Bill"} [What?]-> GoodEnding
 + [Go Back] -> cave_mouth
+-> END
+
+=== GoodEnding ===
+bill finds a cable car, and because he's heavy enough he takes you out on the cable car
 -> END
 
 == west_tunnel ==
 You are in the west
+{Name == "Ben":Ben feel there might be exit at front.} 
+*{Name == "Ben"} [Exit]-> Exit
+
+{Name == "Peter": Peter find something at corner.} 
+*{Name == "Peter"} [Check it out]-> Foods
+
+{Name == "Bill": Bill don't feel well and passed out.} 
+*{Name == "Bill"} [What?]-> Bad_END
 + [Go Back] -> cave_mouth
 -> END
 
+=== Bad_END ===
+Bill so over weight and he passed out, you can't carry him, so you two died in the cave.
+-> END
+
+=== Foods
+Peter find a bag with foods
+~ food = food + 10000
+you have {food} food, that is enough to live here
+->END
+
+=== Exit ===
+There is an Exit at front we made it out!!
+
+->END
+
+
 === torch_pickup ===
+~ tourches = tourches +1
 You now have a torch. May it light the way.
 * [Go Back] -> cave_mouth
 -> END
